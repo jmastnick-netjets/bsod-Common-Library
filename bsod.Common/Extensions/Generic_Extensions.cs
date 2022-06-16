@@ -331,11 +331,11 @@ namespace bsod.Common.Extensions
             {
                 foreach (Type pi in objType.GetInterfaces())
                 {
-                    if (t == pi)
+                    if (objType == pi)
                         ret = true;
                 }
             }
-            if (ret == false && objType.BaseType != null)
+            if (ret == false && objType.BaseType != null && t != objType.BaseType)
                 ret = IsType(obj, objType.BaseType);
                 
             return ret;
