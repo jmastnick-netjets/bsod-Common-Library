@@ -57,10 +57,10 @@ namespace bsod.Common.Extensions
             if (ex.TargetSite != null)
                 str.AppendFormat("{0}{1}THROWN IN: {2}", nLne, _tabOver, ex.TargetSite);
             //str.AppendFormat("{0}{1}Occurred at: {2}", nLne, tabOver, DateTime.Now.ToString());
-            //if (ex.GetType() == typeof(C_Exception) || ex.GetType().BaseType == typeof(C_Exception) ||
-            //    (ex.GetType().BaseType != null && ex.GetType().BaseType.BaseType == typeof(C_Exception)))
+            //if (ex.GetType() == typeof(Exception) || ex.GetType().BaseType == typeof(Exception) ||
+            //    (ex.GetType().BaseType != null && ex.GetType().BaseType.BaseType == typeof(Exception)))
             //{
-            //    C_Exception cEx = ex as C_Exception;
+            //    Exception cEx = ex as Exception;
             //    str.AppendFormat("{0}{1}CREATED AT: {2}", nLne, _tabOver, cEx.Created);
             //    str.AppendFormat("{0}{1}ERROR CODE: {2}", nLne, _tabOver, cEx.ErrorCode);
             //}

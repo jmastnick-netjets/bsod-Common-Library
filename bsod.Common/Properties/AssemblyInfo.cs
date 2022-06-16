@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("bsod.Common")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("bsod Common Library")]
+[assembly: AssemblyDescription("A list of common functions and extensions that are used over and over again.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("bsod.Common")]

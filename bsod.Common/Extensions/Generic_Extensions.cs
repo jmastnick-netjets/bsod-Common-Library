@@ -287,7 +287,59 @@ namespace bsod.Common.Extensions
                 return (T)givenObject;
             }
         }
+        /// <summary>
+        /// Returns true if object is Type given. 
+        /// </summary>
+        /// <typeparam name="T">Type to check.</typeparam>
+        /// <param name="obj">Object to check if Type.</param>
+        public static bool IsType<T>(this object obj)
+        {
+            return IsType<T>(obj, out T outObj);
+        }
+        /// <summary>
+        /// Returns true if object is Type given. Also will return an object of the Type.
+        /// </summary>
+        /// <typeparam name="T">Type to check.</typeparam>
+        /// <param name="obj">Object to check if Type.</param>
+        /// <param name="TypeObject">Returns an Object of the Type</param>
+        public static bool IsType<T>(this object obj, out T TypeObject)
+        {
+            TypeObject = default(T);
+            Type t = typeof(T);
+            if (IsType(obj, t))
+            {
+                TypeObject = (T)obj;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
+        public static bool IsType(this object obj, Type t)
+        {
+            bool ret = false;
+            if (obj == null)
+                return false;
+            Type objType = obj.GetType();
+            if (objType == t)
+            {
+                ret = true;
+            }
+            else
+            {
+                foreach (Type pi in objType.GetInterfaces())
+                {
+                    if (t == pi)
+                        ret = true;
+                }
+            }
+            if (ret == false && objType.BaseType != null)
+                ret = IsType(obj, objType.BaseType);
+                
+            return ret;
+        }
         /// <summary>
         /// This Method does some hacking to convert the Given Object to The Type of the Object of Reference. 
         /// This Method is good if you don't have the known type to convert to, but you have an object of that type. 

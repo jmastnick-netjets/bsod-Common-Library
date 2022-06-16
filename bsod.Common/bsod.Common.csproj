@@ -46,12 +46,18 @@
     <Compile Include="Extensions\DateTime_Extensions.cs" />
     <Compile Include="Extensions\Exception_Extensions.cs" />
     <Compile Include="Extensions\Generic_Extensions.cs" />
-    <Compile Include="Extensions\IO_Extensions.cs" />
+    <Compile Include="Extensions\Stream_Extensions.cs" />
+    <Compile Include="IO\CommonFile.cs" />
+    <Compile Include="IO\FileVersionChecker.cs" />
+    <Compile Include="IO\IO_Extensions.cs" />
     <Compile Include="Extensions\other_Extensions.cs" />
     <Compile Include="Extensions\string_Extensions.cs" />
     <Compile Include="Extensions\xml_Extensions.cs" />
     <Compile Include="Functions.cs" />
+    <Compile Include="IO\Naitive\NativeMethods.cs" />
+    <Compile Include="IO\Naitive\ShellLinkExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
