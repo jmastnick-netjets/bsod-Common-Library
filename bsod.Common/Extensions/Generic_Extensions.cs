@@ -306,7 +306,9 @@ namespace bsod.Common.Extensions
         {
             TypeObject = default(T);
             Type t = typeof(T);
-            if (IsType(obj, t))
+            if (obj == null)
+                return false;
+            if (IsType(obj?.GetType(), t))
             {
                 TypeObject = (T)obj;
                 return true;
@@ -317,12 +319,10 @@ namespace bsod.Common.Extensions
             }
         }
 
-        public static bool IsType(this object obj, Type t)
+        public static bool IsType(this Type objType, Type t)
         {
             bool ret = false;
-            if (obj == null)
-                return false;
-            Type objType = obj.GetType();
+            
             if (objType == t)
             {
                 ret = true;
@@ -331,12 +331,12 @@ namespace bsod.Common.Extensions
             {
                 foreach (Type pi in objType.GetInterfaces())
                 {
-                    if (objType == pi)
+                    if (t == pi)
                         ret = true;
                 }
             }
             if (ret == false && objType.BaseType != null && t != objType.BaseType)
-                ret = IsType(obj, objType.BaseType);
+                ret = IsType(objType.BaseType, t);
                 
             return ret;
         }
