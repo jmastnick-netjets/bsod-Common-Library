@@ -626,7 +626,7 @@ namespace bsod.Common.IO
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to create directory, see inner exception for more details.\r\nCreatePath: {CreatePath}\r\nFileName: {Functions.IsNull(FileName, "NULL")}", ex);
+                throw new Exception($"Failed to create directory, see inner exception for more details.\r\nCreatePath: {CreatePath}\r\nFileName: {CommonFunctions.IsNull(FileName, "NULL")}", ex);
             }
 
         }

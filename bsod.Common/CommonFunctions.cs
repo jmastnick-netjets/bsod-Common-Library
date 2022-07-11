@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace bsod.Common
 {
-    public static class Functions
+    public static class CommonFunctions
     {
         /// <summary>
         /// Checks if the string is null or empty whitespace. If it is it returns the NullString, if none supplied then it returns an empty string.

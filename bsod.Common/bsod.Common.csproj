@@ -32,7 +32,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,11 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAnnotations\DataAnnotations_Extensions.cs" />
+    <Compile Include="DataAnnotations\HideAttribute.cs" />
+    <Compile Include="DataAnnotations\IsKeyAttribute.cs" />
     <Compile Include="Extensions\byte_Extensions.cs" />
     <Compile Include="Extensions\DataTable_Extensions.cs" />
     <Compile Include="Extensions\DateTime_Extensions.cs" />
+    <Compile Include="DataAnnotations\DisplayNameStore.cs" />
     <Compile Include="Extensions\Exception_Extensions.cs" />
+    <Compile Include="Extensions\GenericFunctions.cs" />
+    <Compile Include="Extensions\QueryFilterItem.cs" />
     <Compile Include="Extensions\Generic_Extensions.cs" />
+    <Compile Include="Extensions\Query_Extenstions.cs" />
     <Compile Include="Extensions\Stream_Extensions.cs" />
     <Compile Include="IO\CommonFile.cs" />
     <Compile Include="IO\FileVersionChecker.cs" />
@@ -53,7 +62,7 @@
     <Compile Include="Extensions\other_Extensions.cs" />
     <Compile Include="Extensions\string_Extensions.cs" />
     <Compile Include="Extensions\xml_Extensions.cs" />
-    <Compile Include="Functions.cs" />
+    <Compile Include="CommonFunctions.cs" />
     <Compile Include="IO\Naitive\NativeMethods.cs" />
     <Compile Include="IO\Naitive\ShellLinkExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

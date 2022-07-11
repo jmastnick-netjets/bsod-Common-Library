@@ -265,7 +265,7 @@ namespace bsod.Common.Extensions
             Type arrType = ObjectType.MakeArrayType();
             ////List<dynamic> os = new List<dynamic>();
             object o = Activator.CreateInstance(ObjectType);
-            object[] oArr = (object[])Activator.CreateInstance(arrType, 0);
+            IEnumerable<object> oArr = (object[])Activator.CreateInstance(arrType, 0);
 
             XmlNodeList xProperties = xEl.ChildNodes;
             //PropertyInfo[] properties = ObjectType.GetProperties();
@@ -325,7 +325,7 @@ namespace bsod.Common.Extensions
                 }
                 //}
             }
-            oArr.Add(o);
+            oArr = oArr.Add(o);
 
             return oArr; //os.AsEnumerable();
         }

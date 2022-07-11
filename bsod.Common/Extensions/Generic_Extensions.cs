@@ -1,4 +1,6 @@
-﻿using System;
+﻿using bsod.Common.DataAnnotations;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -182,21 +184,33 @@ namespace bsod.Common.Extensions
             return typeof(T).GetProperties()[0].Name;
         }
 
-
-        private static void Add<T>(ref T[] arr, T value) where T : class
+        /// <summary>
+        /// Adds the value to the given array and outputs the array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="arr">Array to append.</param>
+        /// <param name="value">Value to add.</param>
+        public static T[] Add<T>(this T[] arr, T value) where T : class
         {
             if (arr == null) { arr = new T[0]; }
             Array.Resize(ref arr, arr.Length + 1);
             arr[arr.Length - 1] = value;
+            return arr;
         }
 
-
-        private static void Add<T>(ref IEnumerable<T> arr, T value)
+        /// <summary>
+        /// Adds the value to the given array and outputs the array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="arr">Array to append.</param>
+        /// <param name="value">Value to add.</param>
+        public static IEnumerable<T> Add<T>(this IEnumerable<T> arr, T value)
         {
             if (arr == null) { throw new ArgumentNullException("arr", "Cannot add to null array."); }
             List<T> list = arr.ToList<T>();
             list.Add(value);
             arr = (IEnumerable<T>)list;
+            return arr;
         }
 
         /// <summary>
@@ -221,34 +235,21 @@ namespace bsod.Common.Extensions
             }
         }
 
-        /// <summary>
-        /// Adds Object To Array
-        /// </summary>
-        /// <typeparam name="T">Type Of Array</typeparam>
-        /// <param name="arr">Array To Add To</param>
-        /// <param name="value">Object to Add To Array</param>
-        public static IEnumerable<T> Add<T>(this IEnumerable<T> arr, T value)
-        {
-            if (arr == null) { throw new ArgumentNullException("arr", "Cannot add to null array."); }
-            List<T> list = arr.ToList<T>();
-            list.Add(value);
-            arr = (IEnumerable<T>)list;
-            return arr;
-        }
 
         /// <summary>
-        /// Adds Array of Objects To Array
+        /// Adds Array of Objects To Array, ignores empty values.
         /// </summary>
         /// <typeparam name="T">Type Of Array</typeparam>
         /// <param name="arr">Array To Add To</param>
         /// <param name="value">Array of Objects to Add To Array</param>
-        public static void AddRange<T>(this IEnumerable<T> arr, IEnumerable<T> value)
+        public static IEnumerable<T> AddRange<T>(this IEnumerable<T> arr, IEnumerable<T> value)
         {
-            if (value == null) { return; }
+            if (value == null) { return arr; }
             for (int i = 0; i < value.Count(); i++)
             {
-                Add(ref arr, value.ElementAt(i));
+                arr = Add(arr, value.ElementAt(i));
             }
+            return arr;
         }
 
         /// <summary>
@@ -287,6 +288,18 @@ namespace bsod.Common.Extensions
                 return (T)givenObject;
             }
         }
+
+        //public static bool IsKey(this PropertyInfo prop)
+        //{
+        //    try
+        //    {
+        //        var columnKey = prop.GetCustomAttribute<IsKeyAttribute>();
+        //        return columnKey != null;
+        //    }
+        //    catch (Exception) { }
+        //    return false;
+        //}
+        
         /// <summary>
         /// Returns true if object is Type given. 
         /// </summary>
@@ -318,7 +331,12 @@ namespace bsod.Common.Extensions
                 return false;
             }
         }
-
+        /// <summary>
+        /// Returns true if the objType is the Type given. Also will return an object of the Type.
+        /// </summary>
+        /// <param name="objType"></param>
+        /// <param name="t">Type to compare objType to.</param>
+        /// <returns></returns>
         public static bool IsType(this Type objType, Type t)
         {
             bool ret = false;
@@ -332,7 +350,10 @@ namespace bsod.Common.Extensions
                 foreach (Type pi in objType.GetInterfaces())
                 {
                     if (t == pi)
+                    {
                         ret = true;
+                        break;
+                    }
                 }
             }
             if (ret == false && objType.BaseType != null && t != objType.BaseType)
@@ -360,7 +381,13 @@ namespace bsod.Common.Extensions
             }
             return list.ToArray();
         }
-
+        /// <summary>
+        /// Converts the generic object given to an array of the givenObject.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="hackToInferNeededType"></param>
+        /// <param name="givenObject"></param>
+        /// <returns></returns>
         private static T ConvertArr<T>(this T hackToInferNeededType, object givenObject) //where T : class
         {
             Type t = typeof(T);
@@ -378,11 +405,17 @@ namespace bsod.Common.Extensions
             for (int i = 0; i < objs.Length; i++)
             {
                 dynamic obj = objs[i];
-                Add(ref list, obj);
+                list = Add(list, obj);
             }
             return list;
         }
-
+        /// <summary>
+        /// Converts the enum type given to the givenObject.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="hackToInferNeededType"></param>
+        /// <param name="givenObject"></param>
+        /// <returns></returns>
         private static T ConvertEnum<T>(this T hackToInferNeededType, dynamic givenObject)
         {
             Type t = typeof(T);
@@ -470,5 +503,115 @@ namespace bsod.Common.Extensions
             if (Nullable.GetUnderlyingType(type) != null) return true;
             return false;
         }
+        /// <summary>
+        /// Querys entire list of object properties to find specific string value, ignoring case.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static async Task<IEnumerable<T>> QueryAllAsync<T>(this IEnumerable<T> model, string query)
+        {
+            return await Task.Run(() => QueryAll(model, query));
+        }
+        /// <summary>
+        /// Querys entire list of object properties to find specific string value, ignoring case.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> QueryAll<T>(this IEnumerable<T> model, string query)
+        {
+            if (query == null) return model;
+            Type type = typeof(T);
+            PropertyInfo[] props = type.GetProperties();
+            List<T> retList = new List<T>();
+            StringComparison ignore = StringComparison.CurrentCultureIgnoreCase;
+
+            int propCount = props.Count();
+            for (int i = 0; i < propCount; i++)
+            {
+                PropertyInfo prop = props.ElementAt(i);
+                retList.AddRange((from r in model
+                                  where prop.GetValue(r) != null ? prop.GetValue(r).ToString().IndexOf(query, ignore) >= 0 : false
+                                  select r));
+            }
+            return retList;
+        }
+
+        /// <summary>
+        /// Takes the generic type object and converts it into a CSV string, using the delimiter and newline values given.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="delimiter">Delimiter to put between columns.</param>
+        /// <param name="newLine">New line value to put between rows.</param>
+        /// <returns></returns>
+        public static async Task<string> ToCSVAsync<T>(this IEnumerable array, string delimiter = ",", string newLine = "\r\n")
+        {
+            return await ToCSVAsync<T>((IEnumerable<T>)array, delimiter, newLine);
+        }
+        /// <summary>
+        /// Takes the generic type object and converts it into a CSV string, using the delimiter and newline values given.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="delimiter">Delimiter to put between columns.</param>
+        /// <param name="newLine">New line value to put between rows.</param>
+        /// <returns></returns>
+        public static async Task<string> ToCSVAsync<T>(this IEnumerable<T> array, string delimiter = ",", string newLine = "\r\n")
+        {
+            return await Task.Run(() => ToCSV(array, delimiter, newLine));
+        }
+        /// <summary>
+        /// Takes the generic type object and converts it into a CSV string, using the delimiter and newline values given.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="delimiter">Delimiter to put between columns.</param>
+        /// <param name="newLine">New line value to put between rows.</param>
+        /// <returns></returns>
+        public static string ToCSV<T>(this IEnumerable array, string delimiter = ",", string newLine = "\r\n")
+        {
+            return ToCSV<T>((IEnumerable<T>)array, delimiter, newLine);
+        }
+        /// <summary>
+        /// Takes the generic type object and converts it into a CSV string, using the delimiter and newline values given.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="delimiter">Delimiter to put between columns.</param>
+        /// <param name="newLine">New line value to put between rows.</param>
+        /// <returns></returns>
+        public static string ToCSV<T>(this IEnumerable<T> array, string delimiter = ",", string newLine = "\r\n")
+        {
+            Type type = typeof(T);
+            StringBuilder headerStr = new StringBuilder();
+            StringBuilder retStr = new StringBuilder();
+            string c = "";
+            bool firstPass = true;
+            foreach (var itm in array)
+            {
+                foreach (PropertyInfo prop in type.GetProperties().OrderBy(x => x.GetOrderNumb()))
+                {
+                    DisplayNameStore store = DisplayNameStore.GetDisplayName(type, prop);
+                    if (!store.IsHidden(isExport: true))
+                    {
+                        if (firstPass)
+                        {
+                            headerStr.Append($"{c}\"{store.DisplayName}\"");
+                        }
+                        retStr.Append($"{c}\"{prop.GetValue(itm)}\"");
+                        c = delimiter;
+                    }
+                }
+                firstPass = false;
+                c = "";
+                retStr.Append(newLine);
+            }
+            return $"{headerStr}{newLine}{retStr}";
+        }
+
     }
 }
