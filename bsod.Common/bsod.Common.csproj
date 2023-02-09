@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="DataAnnotations\DataAnnotations_Extensions.cs" />
     <Compile Include="DataAnnotations\HideAttribute.cs" />
+    <Compile Include="DataAnnotations\IgnoreAttribute.cs" />
     <Compile Include="DataAnnotations\IsKeyAttribute.cs" />
     <Compile Include="Extensions\byte_Extensions.cs" />
     <Compile Include="Extensions\DataTable_Extensions.cs" />
